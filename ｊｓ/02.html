@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+        const FPS = 6; 
+        const HANDS = ['✊', '✌️', '✋']; 
+        let lastRivalHandIndex = 0; 
+        let gameLoopInterbalId = null; 
+        
+        function gameLoop() {
+            const handIndex = (lastRivalHandIndex + 1) % 3;
+            lastRivalHandIndex = handIndex;
+            document.getElementById("RivalHand").innerHTML = HANDS[handIndex];
+        }
+        
+      
+        function start() {
+            document.getElementById("startButton").disabled = true;
+            document.getElementById("rockButton").disabled = false;
+            document.getElementById("scissorsButton").disabled = false;
+            document.getElementById("paperButton").disabled = false;
+            
+            document.getElementById("PlayerHand").innerHTML = '　';
+            document.getElementById("Result").innerHTML = '';
+            
+            gameLoopInterbalId = setInterval(gameLoop, 1000 / FPS);
+        }
+        
+        function janken(playerHand) {
+            
+            clearInterval(gameLoopInterbalId);
+            
+            
+            document.getElementById("PlayerHand").innerHTML = playerHand;
+            
+            
+            document.getElementById("startButton").disabled = false;
+            document.getElementById("rockButton").disabled = true;
+            document.getElementById("scissorsButton").disabled = true;
+            document.getElementById("paperButton").disabled = true;
+            
+            const rivalHand = HANDS[lastRivalHandIndex];
+            let result = "";
+
+            
+            if (playerHand === rivalHand) {
+                result = "あいこです。😑";
+            } else if(playerHand === '✊' && rivalHand === '✌️' ||
+                      playerHand === '✌️' && rivalHand === '✋' ||
+                      playerHand === '✋' && rivalHand === '✊') {
+                result = "あなたの勝ちです。👏";
+                winCount++;
+                win.textContent=winCount;
+            } else {
+                result = "あなたの負けです。😢";
+                loseCount++;
+                lose.textContent=loseCount;
+            }            
+            document.getElementById("Result").innerHTML = result;
+        }
+        let winCount=0;
+        let loseCount=0;
+    </script>
+</head>
+<body>
+    <div align="center">
+        <h1>じゃんけんゲーム!!!!!</h1>
+        <img src="top.jfif" alt="">
+        <p><h1>「スタート」をおして、<br>「✊」「✌️」「✋」を選んでください。</h1><br></p>
+        <br>
+        <table border="1" style="border-collapse: collapse">
+            <tr>
+                <td align="center"><h1>　自分　<div id="PlayerHand">✊</div></h1></td>
+                <td align="center"><h1>　相手　<div id="RivalHand">✊</div></h1></td>
+            </tr>
+        </table>
+        <br>
+        <button id="startButton" onclick="start();"><h1>スタート</h1></button>
+        <button id="rockButton" onclick="janken('✊');" disabled="true"><h1> <img src="gu-.jfif" alt=""></h1></button>
+        <button id="scissorsButton" onclick="janken('✌️');" disabled="true"><h1> <img src="tyoki.jfif" alt=""></h1></button>
+        <button id="paperButton" onclick="janken('✋');" disabled="true"><h1><img src="pa-.jfif" alt=""></h1></button>
+        <br><br>
+        <div id="Result"></div>
+        <div>勝ち:<span id="win">0</span>回</div>
+        <div>負け:<span id="lose">0</span>回</div>
+    </div>
+</body>
+</html>
